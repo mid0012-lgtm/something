@@ -12,7 +12,7 @@
 float2 Positions[NUM_NODES];
 float4 Colors[NUM_NODES];
 float Deviation;
-float Cutoff;
+float DeviationMult[NUM_NODES];
 
 
 struct VertexShaderInput
@@ -47,11 +47,8 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	{
 		float a = Positions[i].x;
 		float b = Positions[i].y;
-		float t = exp(-pow((x-a) / Deviation, 2) - pow((y-b) / Deviation, 2));
-		if (t > Cutoff)
-		{
-			c += Colors[i] * t;
-		}
+		float t = exp(-pow((x-a) / (Deviation * DeviationMult[i]), 2) - pow((y-b) / (Deviation * DeviationMult[i]), 2));
+		c += Colors[i] * t;
 	}
 	return c;
 }
