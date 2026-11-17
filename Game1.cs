@@ -53,7 +53,7 @@ public class Game1 : Game
             _colors[i] = new Vector4(Random.Shared.NextSingle(), Random.Shared.NextSingle(), Random.Shared.NextSingle(), 1);
             _positions[i] = new((Random.Shared.NextSingle()-.5f) * 2, (Random.Shared.NextSingle()-.5f) * 2);
             _vels[i] = new((Random.Shared.NextSingle() - .5f), (Random.Shared.NextSingle() - .5f));
-            _deviationMult[i] = Random.Shared.NextSingle();
+            _deviationMult[i] = Random.Shared.NextSingle() + .5f;
         }
         _graphics.HardwareModeSwitch = false;
         _graphics.SynchronizeWithVerticalRetrace = false;
