@@ -18,11 +18,13 @@ public class Game1 : Game
     private EffectParameter _colorsParam;
     private EffectParameter _deviationParam; 
     private EffectParameter _deviationMultParam;
-    private const int NUM_NODES = 30;
+    private EffectParameter _posterizationParam;
+    private const int NUM_NODES = 15;
     private Vector2[] _positions;
     private Vector2[] _vels;
     private float[] _deviationMult;
     private float _speed = 1f;
+    private bool _posterization = false;
     private float _t = 0;
     private Vector4[] _colors;
     private readonly VertexPositionTexture[] _verts = [
@@ -71,16 +73,19 @@ public class Game1 : Game
         _deviationParam = _shader.Parameters["Deviation"];
         _deviationMultParam = _shader.Parameters["DeviationMult"];
         _deviationMultParam.SetValue(_deviationMult);
+        _posterizationParam = _shader.Parameters["Posterization"];
+        _posterizationParam.SetValue(_posterization);
     }
 
     protected override void Update(GameTime gameTime)
     {
+        var keyboardState = Keyboard.GetState();
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
         float dt = gameTime.ElapsedGameTime.Ticks / 10000000f;
         _t += dt;
         Console.WriteLine("FPS: " + 1/dt);
-        if (_prevKeyboardState.IsKeyDown(Keys.R) && Keyboard.GetState().IsKeyUp(Keys.R))
+        if (_prevKeyboardState.IsKeyDown(Keys.R) && keyboardState.IsKeyUp(Keys.R))
         {
             for (int i = 0; i < NUM_NODES; i++)
             {
@@ -89,6 +94,11 @@ public class Game1 : Game
             }
             _colorsParam.SetValue(_colors);
             _deviationMultParam.SetValue(_deviationMult);
+        }
+        if (_prevKeyboardState.IsKeyDown(Keys.P) && keyboardState.IsKeyUp(Keys.P))
+        {
+            _posterization = !_posterization;
+            _posterizationParam.SetValue(_posterization);
         }
         for (int i = 0; i < NUM_NODES; i++)
         {

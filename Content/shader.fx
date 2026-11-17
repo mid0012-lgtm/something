@@ -7,12 +7,13 @@
 	#define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
-#define NUM_NODES 30
+#define NUM_NODES 15
 
 float2 Positions[NUM_NODES];
 float4 Colors[NUM_NODES];
 float Deviation;
 float DeviationMult[NUM_NODES];
+bool Posterization;
 
 
 struct VertexShaderInput
@@ -49,6 +50,10 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 		float b = Positions[i].y;
 		float t = exp(-pow((x-a) / (Deviation * DeviationMult[i]), 2) - pow((y-b) / (Deviation * DeviationMult[i]), 2));
 		c += Colors[i] * t;
+	}
+	if (Posterization)
+	{
+		return round(c * 8) / 8;
 	}
 	return c;
 }
